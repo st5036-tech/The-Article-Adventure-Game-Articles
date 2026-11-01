@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THE MUSEUM OF ARTICLES - Article Adventure</title>
+    <!-- Tailwind CSS for Responsive Layout & Design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts for Modern Video-Game & Museum Style Typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Nunito:wght@400;600;800;900&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        fredoka: ['Fredoka', 'sans-serif'],
+                        nunito: ['Nunito', 'sans-serif'],
+                    },
+                    colors: {
+                        museumGold: '#F4A261',
+                        museumAmber: '#E76F51',
+                        museumGreen: '#2A9D8F',
+                        museumBlue: '#264653',
+                        museumCream: '#F8F9FA',
+                        museumPurple: '#6C5CE7'
+                    },
+                    boxShadow: {
+                        'game-btn': '0px 6px 0px 0px rgba(0,0,0,0.2)',
+                        'card-pop': '0 12px 30px -10px rgba(38, 70, 83, 0.15)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #F8F9FA;
+            background-image: radial-gradient(#264653 0.75px, transparent 0.75px), radial-gradient(#264653 0.75px, #F8F9FA 0.75px);
+            background-size: 30px 30px;
+            background-position: 0 0, 15px 15px;
+            background-opacity: 0.05;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+        }
+        .animate-float {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .btn-game {
+            transition: all 0.1s ease-in-out;
+            transform: translateY(0);
+        }
+        .btn-game:hover {
+            transform: translateY(-2px);
+        }
+        .btn-game:active {
+            transform: translateY(4px);
+            box-shadow: 0px 1px 0px 0px rgba(0,0,0,0.2) !important;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #E2E8F0;
+            border-radius: 8px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #2A9D8F;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between text-slate-800 antialiased selection:bg-museumGold selection:text-museumBlue">
+
+    <!-- TOP NAV / HEADER -->
+    <header class="bg-white border-b-4 border-museumBlue px-4 py-3 shadow-md sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-3 cursor-pointer" onclick="confirmGoHome()">
+                <div class="bg-museumGold text-museumBlue font-fredoka text-2xl font-bold px-3 py-1 rounded-2xl border-2 border-slate-800 shadow">
+                    🏛️
+                </div>
+                <div>
+                    <h1 class="font-fredoka text-xl md:text-2xl font-bold text-museumBlue tracking-wide leading-tight">THE MUSEUM OF ARTICLES</h1>
+                    <p class="text-xs font-bold text-museumGreen uppercase tracking-wider hidden sm:block">Grammatical Artifact Quest</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2 md:gap-4">
+                <button id="soundToggleBtn" onclick="toggleSound()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 p-2.5 rounded-xl border-2 border-slate-300 transition-all text-sm font-bold flex items-center gap-2">
+                    <i id="soundIcon" class="fas fa-volume-up text-museumGreen"></i>
+                    <span class="hidden md:inline">Sound ON</span>
+                </button>
+                <button onclick="openRulesModal()" class="bg-museumGold hover:bg-amber-400 text-museumBlue font-bold px-3 py-2 rounded-xl border-2 border-slate-800 shadow-sm text-sm transition-all flex items-center gap-1.5">
+                    <i class="fas fa-book-open"></i>
+                    <span>Museum Rules</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTAINER -->
+    <main class="max-w-5xl mx-auto px-4 py-6 flex-grow w-full">
+
+        <!-- SCREEN 1: MUSEUM ENTRANCE & TEAM REGISTRATION -->
+        <section id="screenSetup" class="space-y-8 animate-fade-in">
+            <!-- Hero Title Box -->
+            <div class="bg-white rounded-3xl p-6 md:p-8 border-4 border-museumBlue shadow-card-pop text-center relative overflow-hidden">
+                <div class="absolute -top-10 -right-10 w-32 h-32 bg-museumGold rounded-full opacity-30"></div>
+                <div class="absolute -bottom-10 -left-10 w-32 h-32 bg-museumAmber rounded-full opacity-20"></div>
+                
+                <span class="inline-block bg-teal-50 text-museumGreen font-black text-xs md:text-sm uppercase tracking-widest px-4 py-1.5 rounded-full mb-3 border border-teal-200">Interactive High School Expedition</span>
+                <h2 class="font-fredoka text-4xl md:text-6xl font-bold text-museumBlue mb-2 animate-float">THE MUSEUM OF ARTICLES</h2>
+                <p class="font-nunito text-lg md:text-xl font-extrabold text-slate-600 max-w-2xl mx-auto">
+                    Explore ancient grammar halls, restore missing artifacts using <span class="text-museumAmber font-black">A</span>, <span class="text-museumGreen font-black">AN</span>, and <span class="text-museumBlue font-black">THE</span>, and build your official Expedition Report! 🏛️
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <!-- Single Team Registration Form -->
+                <div class="lg:col-span-7 bg-white rounded-3xl p-6 md:p-8 border-4 border-slate-800 shadow-lg">
+                    <div class="flex items-center justify-between mb-6 pb-3 border-b-2 border-slate-100">
+                        <h3 class="font-fredoka text-2xl font-bold text-museumBlue flex items-center gap-2">
+                            <i class="fas fa-id-badge text-museumGreen"></i> Expedition Curator / Team
+                        </h3>
+                        <span class="text-xs bg-slate-100 font-bold px-3 py-1 rounded-full text-slate-500">Single Team Mode</span>
+                    </div>
+                    
+                    <form id="teamForm" onsubmit="saveTeamAndStart(event)" class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-600 mb-2">Team / Curator Name:</label>
+                            <input type="text" id="teamInputName" required maxlength="30"
+                                class="w-full bg-slate-50 px-4 py-3 rounded-2xl border-2 border-slate-300 font-bold text-slate-800 text-base focus:outline-none focus:ring-2 focus:ring-museumGreen"
+                                placeholder="e.g. Explorer Squad 5B">
+                        </div>
+
+                        <div class="pt-4">
+                            <button type="submit" class="w-full btn-game bg-museumGreen hover:bg-emerald-500 text-white font-fredoka text-xl font-bold py-4 px-6 rounded-2xl border-4 border-slate-900 shadow-game-btn flex items-center justify-center gap-3">
+                                <i class="fas fa-door-open text-2xl"></i> ENTER THE EXHIBIT HALLS
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Last Saved Museum Log -->
+                <div class="lg:col-span-5 flex flex-col gap-6">
+                    <div class="bg-white rounded-3xl p-6 border-4 border-slate-800 shadow-lg flex-1 flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between items-center mb-4">
+                                <h3 class="font-fredoka text-xl font-bold text-museumBlue flex items-center gap-2">
+                                    <i class="fas fa-history text-museumGold"></i> Saved Curator Report
+                                </h3>
+                                <button onclick="resetScore()" class="text-xs text-red-500 hover:text-red-700 font-bold underline">
+                                    Reset Log
+                                </button>
+                            </div>
+
+                            <div id="savedReportSummary" class="space-y-3">
+                                <!-- Populated dynamically -->
+                            </div>
+                        </div>
+
+                        <div class="mt-6 pt-4 border-t-2 border-slate-100 flex justify-between items-center text-xs text-slate-500">
+                            <span><i class="fas fa-database mr-1"></i> Auto-saved in browser</span>
+                            <button onclick="exportCurrentReportCSV()" class="text-museumGreen font-bold hover:underline flex items-center gap-1">
+                                <i class="fas fa-file-csv"></i> Download CSV
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SCREEN 2: MUSEUM EXHIBIT HALL GAMEPLAY -->
+        <section id="screenGameplay" class="hidden space-y-6">
+            
+            <!-- Top HUD Bar -->
+            <div class="bg-white rounded-2xl p-4 border-4 border-slate-800 shadow-md flex flex-wrap justify-between items-center gap-4">
+                <!-- Hall / Level Indicator -->
+                <div class="flex items-center gap-3">
+                    <span id="levelBadge" class="bg-museumPurple text-white font-fredoka text-sm font-bold px-3 py-1.5 rounded-xl border-2 border-slate-900 uppercase">
+                        EXHIBIT HALL 1
+                    </span>
+                    <div>
+                        <h3 id="levelTitle" class="font-fredoka text-lg font-bold text-museumBlue leading-tight">Article Selection</h3>
+                        <p id="levelDesc" class="text-xs font-bold text-slate-500">Choose A, AN, or THE (50 XP)</p>
+                    </div>
+                </div>
+
+                <!-- Active Team Badge -->
+                <div class="bg-amber-50 border-2 border-amber-300 px-4 py-1.5 rounded-xl text-center">
+                    <span class="text-xs font-bold uppercase tracking-wider text-amber-800 block">Curator Team</span>
+                    <span id="displayTeamName" class="font-fredoka text-lg font-bold text-slate-800">Team Name</span>
+                </div>
+
+                <!-- Progress & Score -->
+                <div class="flex items-center gap-4">
+                    <div class="text-center">
+                        <span class="text-xs font-bold text-slate-400 uppercase block">Curated Artifacts</span>
+                        <span id="questionProgress" class="font-fredoka text-lg font-bold text-museumGreen">1 / 10</span>
+                    </div>
+
+                    <div class="bg-slate-100 border-2 border-slate-300 px-3 py-1 rounded-xl text-center min-w-[70px]">
+                        <span class="text-xs font-bold text-slate-500 uppercase block">Timer</span>
+                        <span id="timerDisplay" class="font-fredoka text-xl font-bold text-museumAmber">20s</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Question / Artifact Restoration Card -->
+            <div class="bg-white rounded-3xl p-6 md:p-10 border-4 border-museumBlue shadow-card-pop space-y-6 relative">
+                
+                <div class="flex justify-between items-center">
+                    <span class="bg-emerald-100 text-emerald-800 text-xs font-extrabold px-3 py-1 rounded-full border border-emerald-300">
+                        <i class="fas fa-gem text-museumGold mr-1"></i> Reward: <span id="rewardXpText">50 XP</span>
+                    </span>
+                    <span id="questionTopicTag" class="text-xs font-bold text-slate-400 uppercase tracking-wider">Museum Artifact Relic</span>
+                </div>
+
+                <!-- Artifact Sentence Prompt -->
+                <div class="py-6 px-4 bg-amber-50/50 rounded-2xl border-2 border-amber-200 text-center">
+                    <p id="sentencePrompt" class="font-fredoka text-2xl md:text-4xl text-slate-800 font-bold leading-relaxed tracking-wide">
+                        Loading artifact description...
+                    </p>
+                </div>
+
+                <!-- Answer Buttons Container -->
+                <div id="optionsContainer" class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
+                    <!-- Javascript generates buttons -->
+                </div>
+
+                <!-- Feedback Area -->
+                <div id="feedbackBox" class="hidden rounded-2xl p-5 border-4 transition-all duration-300 animate-fade-in space-y-2">
+                    <div class="flex items-center gap-3">
+                        <div id="feedbackIcon" class="text-3xl"></div>
+                        <div>
+                            <h4 id="feedbackTitle" class="font-fredoka text-xl font-bold"></h4>
+                            <p id="feedbackText" class="text-sm font-bold text-slate-700"></p>
+                        </div>
+                    </div>
+                    <div class="pt-2 border-t border-slate-300/50 flex justify-end">
+                        <button id="nextQuestionBtn" onclick="nextQuestion()" class="btn-game bg-museumBlue hover:bg-slate-800 text-white font-fredoka px-6 py-2.5 rounded-xl border-2 border-slate-900 shadow-md flex items-center gap-2 text-sm font-bold">
+                            <span>Next Exhibit</span> <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Live XP Status -->
+            <div class="bg-white rounded-2xl p-4 border-2 border-slate-300 text-center flex justify-between items-center px-6">
+                <span class="font-bold text-sm text-slate-600">Total Museum XP Accumulated:</span>
+                <span id="liveXpDisplay" class="font-fredoka text-2xl font-bold text-museumGreen">0 XP</span>
+            </div>
+        </section>
+
+        <!-- SCREEN 3: EXHIBIT HALL TRANSITION -->
+        <section id="screenTransition" class="hidden text-center py-10 space-y-6">
+            <div class="bg-white rounded-3xl p-8 border-4 border-slate-800 shadow-card-pop max-w-2xl mx-auto space-y-6">
+                <div class="text-6xl animate-bounce">🏛️</div>
+                <h2 id="transitionTitle" class="font-fredoka text-3xl md:text-4xl font-bold text-museumBlue">EXHIBIT HALL CLEARED!</h2>
+                <p id="transitionSubtitle" class="font-nunito font-extrabold text-slate-600 text-lg">You restored all artifacts in this hall. Get ready for the next section!</p>
+                
+                <div class="bg-emerald-50 rounded-2xl p-4 border-2 border-emerald-200">
+                    <h4 class="font-fredoka font-bold text-emerald-900 mb-1">Current Expedition XP</h4>
+                    <p id="transitionXpDisplay" class="font-fredoka text-3xl font-bold text-museumGreen">0 XP</p>
+                </div>
+
+                <button id="btnContinueLevel" onclick="startNextLevel()" class="btn-game bg-museumGreen hover:bg-emerald-500 text-white font-fredoka text-xl font-bold py-4 px-8 rounded-2xl border-4 border-slate-900 shadow-game-btn inline-block">
+                    ENTER NEXT EXHIBIT HALL 🚀
+                </button>
+            </div>
+        </section>
+
+        <!-- SCREEN 4: FINAL EXPEDITION REPORT & CERTIFICATE -->
+        <section id="screenFinal" class="hidden text-center space-y-8 animate-fade-in">
+            <div class="bg-white rounded-3xl p-8 md:p-12 border-4 border-museumPurple shadow-card-pop relative overflow-hidden space-y-6">
+                
+                <div class="inline-block bg-purple-100 text-museumPurple font-black text-sm uppercase px-4 py-1.5 rounded-full border border-purple-200">
+                    📜 Museum Expedition Completed
+                </div>
+
+                <h2 class="font-fredoka text-4xl md:text-6xl font-bold text-museumBlue">
+                    CURATOR CERTIFICATE
+                </h2>
+
+                <p class="font-nunito text-lg font-bold text-slate-600 max-w-lg mx-auto">
+                    Congratulations! <span id="finalTeamTitle" class="text-museumAmber font-black">Team</span> has completed the Museum Expedition with an extraordinary score!
+                </p>
+
+                <!-- Big Badge Display -->
+                <div class="bg-amber-50 rounded-3xl p-6 border-4 border-amber-300 max-w-md mx-auto space-y-2">
+                    <span class="text-5xl">🏆</span>
+                    <h3 id="finalScoreDisplay" class="font-fredoka text-4xl font-bold text-museumBlue">0 XP</h3>
+                    <p class="text-xs font-bold text-slate-500 uppercase">Mastery Badge: Senior Article Curator</p>
+                </div>
+
+                <!-- Detailed Report Table -->
+                <div class="bg-slate-50 rounded-2xl p-6 border-2 border-slate-200 max-w-3xl mx-auto text-left space-y-4">
+                    <div class="flex justify-between items-center border-b pb-3">
+                        <h3 class="font-fredoka text-xl font-bold text-slate-800 flex items-center gap-2">
+                            <i class="fas fa-clipboard-list text-museumGreen"></i> Expedition Report Log
+                        </h3>
+                        <span id="reportDate" class="text-xs font-bold text-slate-400">Date: --</span>
+                    </div>
+
+                    <div id="reportArtifactsList" class="space-y-2 max-h-60 overflow-y-auto pr-1">
+                        <!-- Populated dynamically with answered questions -->
+                    </div>
+                </div>
+
+                <!-- Action Controls -->
+                <div class="flex flex-wrap justify-center gap-4 pt-4">
+                    <button onclick="exportCurrentReportCSV()" class="btn-game bg-museumGreen hover:bg-emerald-500 text-white font-fredoka text-lg font-bold py-3.5 px-6 rounded-2xl border-4 border-slate-900 shadow-game-btn flex items-center gap-2">
+                        <i class="fas fa-download"></i> Save & Export Report (CSV)
+                    </button>
+                    <button onclick="restartGameSameTeam()" class="btn-game bg-museumGold hover:bg-amber-400 text-museumBlue font-fredoka text-lg font-bold py-3.5 px-6 rounded-2xl border-4 border-slate-900 shadow-game-btn flex items-center gap-2">
+                        <i class="fas fa-redo"></i> Re-explore Exhibit
+                    </button>
+                    <button onclick="resetToSetupScreen()" class="btn-game bg-slate-200 hover:bg-slate-300 text-slate-800 font-fredoka text-lg font-bold py-3.5 px-6 rounded-2xl border-4 border-slate-900 shadow-game-btn flex items-center gap-2">
+                        <i class="fas fa-user-edit"></i> Change Team
+                    </button>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-white border-t-2 border-slate-200 py-4 px-4 text-center text-xs font-bold text-slate-500">
+        <div class="max-w-5xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-2">
+            <p>THE MUSEUM OF ARTICLES &copy; High School English Grammar Edition</p>
+            <p class="flex items-center gap-2">
+                <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-500"></span> Works 100% Offline
+            </p>
+        </div>
+    </footer>
+
+    <!-- RULES & GRAMMAR TIPS MODAL -->
+    <div id="rulesModal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl border-4 border-slate-900 max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6 md:p-8 space-y-6 shadow-2xl relative">
+            
+            <button onclick="closeRulesModal()" class="absolute top-4 right-4 bg-slate-100 hover:bg-slate-200 text-slate-700 w-10 h-10 rounded-full font-bold border-2 border-slate-400 flex items-center justify-center">
+                ✕
+            </button>
+
+            <div class="flex items-center gap-3 border-b-2 border-slate-100 pb-3">
+                <span class="text-3xl">🏛️</span>
+                <h3 class="font-fredoka text-2xl font-bold text-museumBlue">Museum Grammar Archives</h3>
+            </div>
+
+            <div class="space-y-4 text-sm text-slate-700">
+                <!-- Rule 1: A -->
+                <div class="bg-sky-50 p-4 rounded-2xl border-2 border-sky-200">
+                    <h4 class="font-fredoka text-lg font-bold text-museumBlue mb-1">1. Article 'A'</h4>
+                    <p class="mb-2">Used before singular countable nouns that start with a <strong>consonant sound</strong>.</p>
+                    <ul class="list-disc list-inside font-semibold text-slate-600 space-y-1">
+                        <li>I have <strong>a</strong> dog.</li>
+                        <li>She is <strong>a</strong> teacher.</li>
+                        <li><span class="text-amber-700 font-extrabold">Phonetic Rule:</span> She studies at <strong>a</strong> university. (Starts with consonant sound /juː/).</li>
+                    </ul>
+                </div>
+
+                <!-- Rule 2: AN -->
+                <div class="bg-emerald-50 p-4 rounded-2xl border-2 border-emerald-200">
+                    <h4 class="font-fredoka text-lg font-bold text-emerald-700 mb-1">2. Article 'AN'</h4>
+                    <p class="mb-2">Used before singular countable nouns that start with a <strong>vowel sound</strong> (a, e, i, o, u).</p>
+                    <ul class="list-disc list-inside font-semibold text-slate-600 space-y-1">
+                        <li>She ate <strong>an</strong> apple.</li>
+                        <li>He is <strong>an</strong> engineer.</li>
+                        <li><span class="text-amber-700 font-extrabold">Phonetic Rule:</span> Waited for <strong>an</strong> hour / <strong>an</strong> honest person. (The 'H' is silent!).</li>
+                    </ul>
+                </div>
+
+                <!-- Rule 3: THE -->
+                <div class="bg-purple-50 p-4 rounded-2xl border-2 border-purple-200">
+                    <h4 class="font-fredoka text-lg font-bold text-museumPurple mb-1">3. Article 'THE' (Definite)</h4>
+                    <p class="mb-2">Used for <strong>specific, unique, or previously mentioned</strong> nouns.</p>
+                    <ul class="list-disc list-inside font-semibold text-slate-600 space-y-1">
+                        <li>Please close <strong>the</strong> door of the classroom.</li>
+                        <li><strong>The</strong> sun is shining today. (Unique object).</li>
+                        <li>Where is <strong>the</strong> book I left on your desk? (Specific item).</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="pt-2 text-center">
+                <button onclick="closeRulesModal()" class="btn-game bg-museumGold hover:bg-amber-400 text-museumBlue font-fredoka px-8 py-3 rounded-2xl border-3 border-slate-900 font-bold text-base">
+                    Got it! Back to Museum
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC & ENGINE -->
+    <script>
+        /* ==========================================================================
+           1. QUESTION BANK DATA (25 QUESTIONS FOR EXHIBIT HALLS)
+           ========================================================================== */
+        const QUESTION_BANK = [
+            // Level 1 Questions (Article Selection - 50 XP)
+            { id: 1, level: 1, sentence: "I have ___ dog.", answer: "a", options: ["a", "an", "the"], explanation: "'Dog' starts with a consonant sound /d/, so we use 'a'." },
+            { id: 2, level: 1, sentence: "She bought ___ new backpack.", answer: "a", options: ["a", "an", "the"], explanation: "'New' starts with a consonant sound /n/." },
+            { id: 3, level: 1, sentence: "He is ___ teacher.", answer: "a", options: ["a", "an", "the"], explanation: "Professions take 'a' or 'an'. 'Teacher' starts with /t/." },
+            { id: 4, level: 1, sentence: "There is ___ pencil on the desk.", answer: "a", options: ["a", "an", "the"], explanation: "Singular countable noun starting with consonant sound." },
+            { id: 5, level: 1, sentence: "She studies at ___ university.", answer: "a", options: ["a", "an", "the"], explanation: "Phonetic Exception! 'University' begins with the consonant sound /juː/, so we use 'a'." },
+            { id: 6, level: 1, sentence: "She ate ___ apple.", answer: "an", options: ["a", "an", "the"], explanation: "'Apple' starts with a vowel sound /æ/." },
+            { id: 7, level: 1, sentence: "He is ___ engineer.", answer: "an", options: ["a", "an", "the"], explanation: "'Engineer' starts with a vowel sound /en/." },
+            { id: 8, level: 1, sentence: "I saw ___ elephant at the zoo.", answer: "an", options: ["a", "an", "the"], explanation: "'Elephant' starts with a vowel sound /el/." },
+            { id: 9, level: 1, sentence: "He waited for ___ hour.", answer: "an", options: ["a", "an", "the"], explanation: "Silent H! 'Hour' starts with a vowel sound /aʊər/, requiring 'an'." },
+            { id: 10, level: 1, sentence: "She is ___ honest person.", answer: "an", options: ["a", "an", "the"], explanation: "Silent H! 'Honest' has a vowel sound /ɒn/, so we use 'an'." },
+
+            // Level 2 Questions (Grammar Emergency / Spot Error - 75 XP)
+            { id: 11, level: 2, sentence: "Please close ___ door of the classroom.", answer: "the", options: ["a", "an", "the"], explanation: "Specific door being pointed out in the classroom." },
+            { id: 12, level: 2, sentence: "___ sun is shining today.", answer: "the", options: ["a", "an", "the"], explanation: "Unique celestial object: there is only one sun." },
+            { id: 13, level: 2, sentence: "___ moon looks beautiful tonight.", answer: "the", options: ["a", "an", "the"], explanation: "Unique celestial body." },
+            { id: 14, level: 2, sentence: "I like ___ red car parked outside my house.", answer: "the", options: ["a", "an", "the"], explanation: "Refers to a specific car outside the house." },
+            { id: 15, level: 2, sentence: "___ teacher wearing glasses is my English teacher.", answer: "the", options: ["a", "an", "the"], explanation: "Identified specific teacher wearing glasses." },
+            { id: 16, level: 2, sentence: "I need ___ computer.", answer: "a", options: ["a", "an", "the"], explanation: "General non-specific singular item." },
+            { id: 17, level: 2, sentence: "There is ___ owl in the tree.", answer: "an", options: ["a", "an", "the"], explanation: "'Owl' begins with a vowel sound /aʊ/." },
+            { id: 18, level: 2, sentence: "It was ___ amazing movie.", answer: "an", options: ["a", "an", "the"], explanation: "'Amazing' begins with a vowel sound /əˈmeɪ/." },
+            { id: 19, level: 2, sentence: "Please open ___ window next to the board.", answer: "the", options: ["a", "an", "the"], explanation: "Specific window specified by its position." },
+            { id: 20, level: 2, sentence: "___ Earth moves around the sun.", answer: "the", options: ["a", "an", "the"], explanation: "Unique planet name used in this context." },
+
+            // Level 3 Questions (Final Boss / Advanced Context - 100 XP)
+            { id: 21, level: 3, sentence: "Where is ___ book I left on your desk?", answer: "the", options: ["a", "an", "the"], explanation: "Specific book already identified by previous action." },
+            { id: 22, level: 3, sentence: "He found ___ interesting book.", answer: "an", options: ["a", "an", "the"], explanation: "Non-specific book described with vowel-sound adjective 'interesting'." },
+            { id: 23, level: 3, sentence: "Look at ___ dog sleeping under our table.", answer: "the", options: ["a", "an", "the"], explanation: "Specific dog being pointed out in the immediate room." },
+            { id: 24, level: 3, sentence: "He is wearing ___ blue jacket.", answer: "a", options: ["a", "an", "the"], explanation: "'Blue' begins with a consonant sound /b/." },
+            { id: 25, level: 3, sentence: "___ principal of our school is very friendly.", answer: "the", options: ["a", "an", "the"], explanation: "There is only one principal for our school (specific)." }
+        ];
+
+        const VICTORY_MESSAGES = [
+            "Artifact successfully restored! ✨",
+            "Exemplary Curator skills! XP awarded! 🏛️",
+            "Brilliant deduction! The Museum thanks you! 📜",
+            "Masterpiece precision! Keep going! 🏆"
+        ];
+
+        const FAILURE_MESSAGES = [
+            "Artifact restoration failed! 👾",
+            "Watch out for phonetic sound traps! 🔍",
+            "Remember: listen to vowel vs consonant sounds! 👂",
+            "Not quite! Check if the item is specific or general! ⚠️"
+        ];
+
+        /* ==========================================================================
+           2. STATE MANAGEMENT & SINGLE-TEAM STORAGE
+           ========================================================================== */
+        let state = {
+            teamName: "Museum Explorers",
+            score: 0,
+            currentLevel: 1, // 1, 2, or 3
+            currentQuestionIndex: 0,
+            questionsForCurrentLevel: [],
+            soundEnabled: true,
+            timerSeconds: 20,
+            timerInterval: null,
+            isAnswered: false,
+            answeredHistory: [] // Report logs
+        };
+
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        let audioCtx = null;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new AudioContext();
+            }
+        }
+
+        function playSound(type) {
+            if (!state.soundEnabled) return;
+            try {
+                initAudio();
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                if (type === 'correct') {
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(523.25, audioCtx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.3);
+                    gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.3);
+                } else if (type === 'incorrect') {
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(220, audioCtx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(110, audioCtx.currentTime + 0.3);
+                    gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.3);
+                } else if (type === 'click') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(400, audioCtx.currentTime);
+                    gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.05);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.05);
+                }
+            } catch (e) {
+                console.log("Audio play error:", e);
+            }
+        }
+
+        function toggleSound() {
+            state.soundEnabled = !state.soundEnabled;
+            const icon = document.getElementById("soundIcon");
+            const btn = document.getElementById("soundToggleBtn");
+            if (state.soundEnabled) {
+                icon.className = "fas fa-volume-up text-museumGreen";
+                btn.querySelector("span").textContent = "Sound ON";
+                playSound('click');
+            } else {
+                icon.className = "fas fa-volume-mute text-slate-400";
+                btn.querySelector("span").textContent = "Sound OFF";
+            }
+        }
+
+        function saveToLocalStorage() {
+            try {
+                const data = {
+                    teamName: state.teamName,
+                    score: state.score,
+                    answeredHistory: state.answeredHistory
+                };
+                localStorage.setItem('museum_article_team_data', JSON.stringify(data));
+            } catch (e) {
+                console.warn("Unable to save to localStorage", e);
+            }
+        }
+
+        function loadFromLocalStorage() {
+            try {
+                const saved = localStorage.getItem('museum_article_team_data');
+                if (saved) {
+                    const parsed = JSON.parse(saved);
+                    if (parsed.teamName) state.teamName = parsed.teamName;
+                    if (typeof parsed.score === 'number') state.score = parsed.score;
+                    if (Array.isArray(parsed.answeredHistory)) state.answeredHistory = parsed.answeredHistory;
+                }
+            } catch (e) {
+                console.warn("Unable to load from localStorage", e);
+            }
+        }
+
+        /* ==========================================================================
+           3. SETUP & INITIALIZATION
+           ========================================================================== */
+        window.onload = function() {
+            loadFromLocalStorage();
+            document.getElementById('teamInputName').value = state.teamName;
+            renderSavedReportSummary();
+        };
+
+        function renderSavedReportSummary() {
+            const container = document.getElementById('savedReportSummary');
+            container.innerHTML = `
+                <div class="p-4 rounded-2xl bg-amber-50 border border-amber-200 text-slate-800 space-y-2">
+                    <div class="flex justify-between items-center">
+                        <span class="font-bold text-sm text-slate-600">Active Team:</span>
+                        <span class="font-fredoka font-bold text-museumBlue text-base">${state.teamName}</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="font-bold text-sm text-slate-600">Saved Score:</span>
+                        <span class="font-fredoka font-bold text-museumGreen text-lg">${state.score} XP</span>
+                    </div>
+                    <div class="flex justify-between items-center text-xs text-slate-500 pt-1">
+                        <span>Restored Artifacts: ${state.answeredHistory.length}</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        function saveTeamAndStart(e) {
+            e.preventDefault();
+            playSound('click');
+
+            const val = document.getElementById('teamInputName').value.trim();
+            state.teamName = val || "Museum Explorers";
+            saveToLocalStorage();
+
+            startLevel(1);
+        }
+
+        function resetScore() {
+            if (confirm("Are you sure you want to reset your score and curator report log?")) {
+                playSound('click');
+                state.score = 0;
+                state.answeredHistory = [];
+                saveToLocalStorage();
+                renderSavedReportSummary();
+            }
+        }
+
+        /* ==========================================================================
+           4. GAMEPLAY LOGIC
+           ========================================================================== */
+        function startLevel(levelNum) {
+            state.currentLevel = levelNum;
+            state.currentQuestionIndex = 0;
+
+            let pool = QUESTION_BANK.filter(q => q.level === levelNum);
+            state.questionsForCurrentLevel = shuffleArray([...pool]);
+
+            const levelBadge = document.getElementById('levelBadge');
+            const levelTitle = document.getElementById('levelTitle');
+            const levelDesc = document.getElementById('levelDesc');
+            const rewardXpText = document.getElementById('rewardXpText');
+
+            if (levelNum === 1) {
+                levelBadge.textContent = "EXHIBIT HALL 1";
+                levelBadge.className = "bg-museumAmber text-white font-fredoka text-sm font-bold px-3 py-1.5 rounded-xl border-2 border-slate-900 uppercase";
+                levelTitle.textContent = "Article Selection";
+                levelDesc.textContent = "Choose A, AN, or THE";
+                rewardXpText.textContent = "50 XP";
+            } else if (levelNum === 2) {
+                levelBadge.textContent = "EXHIBIT HALL 2";
+                levelBadge.className = "bg-museumGreen text-white font-fredoka text-sm font-bold px-3 py-1.5 rounded-xl border-2 border-slate-900 uppercase";
+                levelTitle.textContent = "Grammar Emergency";
+                levelDesc.textContent = "Spot & Fix Incorrect Articles";
+                rewardXpText.textContent = "75 XP";
+            } else if (levelNum === 3) {
+                levelBadge.textContent = "HALL 3 - BOSS EXHIBIT";
+                levelBadge.className = "bg-museumPurple text-white font-fredoka text-sm font-bold px-3 py-1.5 rounded-xl border-2 border-slate-900 uppercase animate-pulse";
+                levelTitle.textContent = "The Final Artifact";
+                levelDesc.textContent = "Master Level Grammar Relics";
+                rewardXpText.textContent = "100 XP";
+            }
+
+            document.getElementById('displayTeamName').textContent = state.teamName;
+            document.getElementById('liveXpDisplay').textContent = `${state.score} XP`;
+
+            document.getElementById('screenSetup').classList.add('hidden');
+            document.getElementById('screenTransition').classList.add('hidden');
+            document.getElementById('screenFinal').classList.add('hidden');
+            document.getElementById('screenGameplay').classList.remove('hidden');
+
+            loadCurrentQuestion();
+        }
+
+        function loadCurrentQuestion() {
+            state.isAnswered = false;
+            document.getElementById('feedbackBox').classList.add('hidden');
+
+            const currentQ = state.questionsForCurrentLevel[state.currentQuestionIndex];
+            const totalQ = state.questionsForCurrentLevel.length;
+
+            document.getElementById('questionProgress').textContent = `${state.currentQuestionIndex + 1} / ${totalQ}`;
+            document.getElementById('sentencePrompt').innerHTML = currentQ.sentence.replace('___', '<span class="underline decoration-museumGold underline-offset-8 px-2 font-black text-museumBlue">___</span>');
+
+            const optionsContainer = document.getElementById('optionsContainer');
+            optionsContainer.innerHTML = '';
+
+            currentQ.options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = "btn-game bg-white hover:bg-teal-50 text-museumBlue font-fredoka text-2xl font-bold py-4 px-6 rounded-2xl border-4 border-slate-800 shadow-game-btn transition-all uppercase";
+                btn.textContent = opt;
+                btn.onclick = () => handleAnswerSelect(opt, btn);
+                optionsContainer.appendChild(btn);
+            });
+
+            startTimer();
+        }
+
+        function startTimer() {
+            clearInterval(state.timerInterval);
+            state.timerSeconds = 20;
+            const timerDisplay = document.getElementById('timerDisplay');
+            timerDisplay.textContent = `${state.timerSeconds}s`;
+            timerDisplay.className = "font-fredoka text-xl font-bold text-museumAmber";
+
+            state.timerInterval = setInterval(() => {
+                state.timerSeconds--;
+                timerDisplay.textContent = `${state.timerSeconds}s`;
+
+                if (state.timerSeconds <= 5) {
+                    timerDisplay.className = "font-fredoka text-xl font-bold text-red-600 animate-pulse";
+                }
+
+                if (state.timerSeconds <= 0) {
+                    clearInterval(state.timerInterval);
+                    handleAnswerSelect(null, null);
+                }
+            }, 1000);
+        }
+
+        function handleAnswerSelect(selectedOption, btnElement) {
+            if (state.isAnswered) return;
+            state.isAnswered = true;
+            clearInterval(state.timerInterval);
+
+            const currentQ = state.questionsForCurrentLevel[state.currentQuestionIndex];
+            const isCorrect = selectedOption && selectedOption.toLowerCase() === currentQ.answer.toLowerCase();
+            
+            const feedbackBox = document.getElementById('feedbackBox');
+            const feedbackIcon = document.getElementById('feedbackIcon');
+            const feedbackTitle = document.getElementById('feedbackTitle');
+            const feedbackText = document.getElementById('feedbackText');
+
+            const xpReward = state.currentLevel === 1 ? 50 : state.currentLevel === 2 ? 75 : 100;
+
+            // Save to history log
+            state.answeredHistory.push({
+                sentence: currentQ.sentence,
+                userAnswer: selectedOption || "Timeout",
+                correctAnswer: currentQ.answer,
+                isCorrect: isCorrect,
+                xpEarned: isCorrect ? xpReward : 0,
+                level: state.currentLevel
+            });
+
+            if (isCorrect) {
+                playSound('correct');
+                state.score += xpReward;
+                saveToLocalStorage();
+                document.getElementById('liveXpDisplay').textContent = `${state.score} XP`;
+
+                const randomVictory = VICTORY_MESSAGES[Math.floor(Math.random() * VICTORY_MESSAGES.length)];
+                
+                feedbackBox.className = "rounded-2xl p-5 border-4 border-emerald-500 bg-emerald-50 text-emerald-900 animate-fade-in space-y-2";
+                feedbackIcon.textContent = "🏛️";
+                feedbackTitle.textContent = `CORRECT! (+${xpReward} XP)`;
+                feedbackText.innerHTML = `${randomVictory}<br><span class="text-xs font-semibold mt-1 block">💡 <strong>Grammar Relic Rule:</strong> ${currentQ.explanation}</span>`;
+
+                if (btnElement) {
+                    btnElement.classList.remove('bg-white');
+                    btnElement.classList.add('bg-emerald-400', 'text-slate-900', 'border-emerald-700');
+                }
+            } else {
+                playSound('incorrect');
+                const randomFailure = FAILURE_MESSAGES[Math.floor(Math.random() * FAILURE_MESSAGES.length)];
+
+                feedbackBox.className = "rounded-2xl p-5 border-4 border-rose-500 bg-rose-50 text-rose-900 animate-fade-in space-y-2";
+                feedbackIcon.textContent = selectedOption === null ? "⏰" : "❌";
+                feedbackTitle.textContent = selectedOption === null ? "EXHIBIT TIMEOUT!" : "RESTORATION ERROR!";
+                feedbackText.innerHTML = `${randomFailure}<br>Correct Article: <strong class="uppercase font-extrabold text-museumAmber">${currentQ.answer}</strong>.<br><span class="text-xs font-semibold mt-1 block">💡 <strong>Grammar Relic Rule:</strong> ${currentQ.explanation}</span>`;
+
+                if (btnElement) {
+                    btnElement.classList.remove('bg-white');
+                    btnElement.classList.add('bg-rose-400', 'text-white', 'border-rose-700');
+                }
+            }
+
+            feedbackBox.classList.remove('hidden');
+        }
+
+        function nextQuestion() {
+            playSound('click');
+            state.currentQuestionIndex++;
+
+            if (state.currentQuestionIndex < state.questionsForCurrentLevel.length) {
+                loadCurrentQuestion();
+            } else {
+                handleLevelCompletion();
+            }
+        }
+
+        /* ==========================================================================
+           5. TRANSITIONS & FINAL EXPEDITION REPORT
+           ========================================================================== */
+        function handleLevelCompletion() {
+            clearInterval(state.timerInterval);
+
+            if (state.currentLevel < 3) {
+                document.getElementById('screenGameplay').classList.add('hidden');
+                const transScreen = document.getElementById('screenTransition');
+                transScreen.classList.remove('hidden');
+
+                document.getElementById('transitionTitle').textContent = `EXHIBIT HALL ${state.currentLevel} CLEARED!`;
+                document.getElementById('transitionXpDisplay').textContent = `${state.score} XP`;
+
+            } else {
+                showFinalReportScreen();
+            }
+        }
+
+        function startNextLevel() {
+            playSound('click');
+            startLevel(state.currentLevel + 1);
+        }
+
+        function showFinalReportScreen() {
+            document.getElementById('screenGameplay').classList.add('hidden');
+            document.getElementById('screenTransition').classList.add('hidden');
+            const finalScreen = document.getElementById('screenFinal');
+            finalScreen.classList.remove('hidden');
+
+            document.getElementById('finalTeamTitle').textContent = state.teamName;
+            document.getElementById('finalScoreDisplay').textContent = `${state.score} XP`;
+            document.getElementById('reportDate').textContent = `Date: ${new Date().toLocaleDateString()}`;
+
+            // Build Artifact History List
+            const reportList = document.getElementById('reportArtifactsList');
+            reportList.innerHTML = '';
+
+            state.answeredHistory.forEach((item, index) => {
+                const row = document.createElement('div');
+                row.className = `p-3 rounded-xl border text-xs font-bold flex justify-between items-center ${
+                    item.isCorrect ? 'bg-emerald-50 border-emerald-200 text-emerald-900' : 'bg-rose-50 border-rose-200 text-rose-900'
+                }`;
+
+                row.innerHTML = `
+                    <div class="space-y-0.5 max-w-[80%]">
+                        <span class="text-[10px] uppercase font-black text-slate-400 block">Artifact #${index + 1} (Hall ${item.level})</span>
+                        <p class="text-sm font-semibold text-slate-800">${item.sentence}</p>
+                        <p>Answer: <span class="uppercase font-black">${item.userAnswer}</span> ${!item.isCorrect ? `(Correct: <span class="uppercase font-black">${item.correctAnswer}</span>)` : ''}</p>
+                    </div>
+                    <span class="font-black text-sm px-2.5 py-1 rounded-lg ${item.isCorrect ? 'bg-emerald-200 text-emerald-900' : 'bg-rose-200 text-rose-900'}">
+                        +${item.xpEarned} XP
+                    </span>
+                `;
+                reportList.appendChild(row);
+            });
+
+            playSound('correct');
+        }
+
+        /* ==========================================================================
+           6. UTILITIES, REPORT CSV EXPORT & NAVIGATION
+           ========================================================================== */
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function confirmGoHome() {
+            if (confirm("Return to main museum entrance? Your progress will be saved in your Curator Report.")) {
+                playSound('click');
+                clearInterval(state.timerInterval);
+                renderSavedReportSummary();
+                document.getElementById('screenGameplay').classList.add('hidden');
+                document.getElementById('screenTransition').classList.add('hidden');
+                document.getElementById('screenFinal').classList.add('hidden');
+                document.getElementById('screenSetup').classList.remove('hidden');
+            }
+        }
+
+        function restartGameSameTeam() {
+            playSound('click');
+            state.score = 0;
+            state.answeredHistory = [];
+            saveToLocalStorage();
+            startLevel(1);
+        }
+
+        function resetToSetupScreen() {
+            playSound('click');
+            renderSavedReportSummary();
+            document.getElementById('screenFinal').classList.add('hidden');
+            document.getElementById('screenSetup').classList.remove('hidden');
+        }
+
+        function exportCurrentReportCSV() {
+            playSound('click');
+            let csvContent = "data:text/csv;charset=utf-8,Museum Expedition Report Log\n";
+            csvContent += `Team Name,"${state.teamName}"\n`;
+            csvContent += `Total XP,${state.score}\n`;
+            csvContent += `Date,${new Date().toLocaleDateString()}\n\n`;
+            csvContent += "Artifact #,Exhibit Hall,Sentence,Your Answer,Correct Answer,Status,XP Earned\n";
+
+            state.answeredHistory.forEach((item, idx) => {
+                const cleanSentence = item.sentence.replace(/"/g, '""');
+                csvContent += `${idx + 1},Hall ${item.level},"${cleanSentence}","${item.userAnswer}","${item.correctAnswer}",${item.isCorrect ? "Correct" : "Incorrect"},${item.xpEarned}\n`;
+            });
+
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", `Museum_Articles_Report_${state.teamName.replace(/\s+/g, '_')}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function openRulesModal() {
+            playSound('click');
+            document.getElementById('rulesModal').classList.remove('hidden');
+        }
+
+        function closeRulesModal() {
+            playSound('click');
+            document.getElementById('rulesModal').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
